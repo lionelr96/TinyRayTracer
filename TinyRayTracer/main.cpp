@@ -3,8 +3,13 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <algorithm>
 #include "geometry.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
 
 void render () {
 	const int width = 1024;
@@ -17,10 +22,10 @@ void render () {
 		}
 	}
 
-	std::cout << std::min (1, 2);
+	std::cout << "Framebuffer created\n";
 
 	std::ofstream ofs; // save the framebuffer to file
-	ofs.open ("./out.ppm");
+	ofs.open ("./out_3.ppm", std::ofstream::out | std::ofstream::binary);
 	ofs << "P6\n" << width << " " << height << "\n255\n";
 	for (size_t i = 0; i < height * width; ++i) {
 		for (size_t j = 0; j < 3; j++) {
@@ -28,6 +33,8 @@ void render () {
 		}
 	}
 	ofs.close ();
+	std::cout << "Image created!" << std::endl;
+
 }
 
 int main () {
