@@ -32,7 +32,7 @@ std::pair<float, float> intersect_ray_sphere (Vec3f& o, Vec3f& d, Sphere& s) {
 }
 
 // lighting calculations
-float compute_lighting (Vec3f& p, Vec3f& n, std::vector<Light> lights) {
+float compute_lighting (Vec3f& p, Vec3f& n, std::vector<Light> lights, Vec3f dir, float s) {
 	float intensity{ 0.0 };
 	Vec3f l;
 	for (int i = 0; i < lights.size (); ++i) {
@@ -46,9 +46,20 @@ float compute_lighting (Vec3f& p, Vec3f& n, std::vector<Light> lights) {
 			else {
 				l = lights[i].get_direction ();
 			}
+
+			// diffuse lighting
 			float n_dot_l = n.dot (l);
 			if (n_dot_l > 0) {
 				intensity += lights[i].get_intensity () * n_dot_l / (n.get_magnitude () * l.get_magnitude ());
+			}
+
+			// specular lighting
+			if (s != 1) {
+				Vec3f reflectance = n * 2 * n.dot (l) - l;
+				float r_dot_v = reflectance.dot (dir);
+				if (r_dot_v > 0) {
+					intensity += lights[i].get_intensity () * std::pow (r_dot_v / reflectance.get_magnitude () * dir.get_magnitude (), s);
+				}
 			}
 		}
 	}
@@ -81,7 +92,7 @@ Vec3f trace_ray (Vec3f& origin, Vec3f& dir, std::vector<Sphere>& spheres, std::v
 	Vec3f point = origin + (dir * closest_t);
 	Vec3f normal = point - closest_sphere.get_center ();
 	normal = normal / normal.get_magnitude ();
-	return closest_sphere.get_color () * compute_lighting (point, normal, lights); // final pixel color
+	return closest_sphere.get_color () * compute_lighting (point, normal, lights, -dir, closest_sphere.get_specular ()); // final pixel color
 }
 
 // main render function
@@ -107,7 +118,7 @@ void render (std::vector<Sphere>& spheres, std::vector<Light>& lights) {
 
 	// outputting ppm
 	std::ofstream ofs; // save the framebuffer to file
-	ofs.open ("./out_2.ppm", std::ofstream::out | std::ofstream::binary);
+	ofs.open ("./out_3.ppm", std::ofstream::out | std::ofstream::binary);
 	ofs << "P6\n" << width << " " << height << "\n255\n";
 	for (size_t i = 0; i < height * width; ++i) {
 		for (size_t j = 0; j < 3; j++) {
@@ -121,13 +132,13 @@ void render (std::vector<Sphere>& spheres, std::vector<Light>& lights) {
 
 int main () {
 	std::vector<Sphere> spheres;
-	// spheres are rendered on the order of the center, color, and radius
-	spheres.push_back (Sphere (Vec3f (-5, 0, -15), Vec3f (0.8, 0, 0), 1.5)); // red
-	spheres.push_back (Sphere (Vec3f (3, 0, -17), Vec3f (0, 0, 0.8), 2)); // blue
-	spheres.push_back (Sphere (Vec3f (-1, 0, -14), Vec3f (0, 0.8, 0), 2)); // green
-	spheres.push_back (Sphere (Vec3f (-10, 0, -20), Vec3f (1, 0, 1), 1.5)); // purple
-	spheres.push_back (Sphere (Vec3f (7, 0, -20), Vec3f (1, 1, 0), 1.5)); // yellow
-	spheres.push_back (Sphere (Vec3f (0, -5001, 0), Vec3f (1, 1, 0), 5000));
+	// spheres are rendered on the order of the center, color, radius, how specular
+	spheres.push_back (Sphere (Vec3f (-5, 0, -15), Vec3f (0.8, 0, 0), 1.5, 500)); // red
+	spheres.push_back (Sphere (Vec3f (3, 0, -17), Vec3f (0, 0, 0.8), 2, 500)); // blue
+	spheres.push_back (Sphere (Vec3f (-1, 0, -14), Vec3f (0, 0.8, 0), 2, 500)); // green
+	spheres.push_back (Sphere (Vec3f (-10, 0, -20), Vec3f (1, 0, 1), 1.5, 500)); // purple
+	spheres.push_back (Sphere (Vec3f (7, 0, -20), Vec3f (1, 1, 0), 1.5, 500)); // yellow
+	spheres.push_back (Sphere (Vec3f (0, -5001, 0), Vec3f (1, 1, 0), 5000, 1000));
 
 	// lights are rendered on the order of the type, the intensity, and the position
 	std::vector<Light> lights;
