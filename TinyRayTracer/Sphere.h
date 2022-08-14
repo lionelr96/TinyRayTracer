@@ -16,6 +16,7 @@ public:
 		return radius;
 	}
 
+	// checking if sphere is real
 	bool check_sphere () {
 		return is_real;
 	}
