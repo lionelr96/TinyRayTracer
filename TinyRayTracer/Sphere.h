@@ -5,12 +5,12 @@
 class Sphere {
 private:
 	Vec3f center, color;
-	float radius, specular;
+	float radius, specular, reflectance;
 	bool is_real;
 
 public:
 	Sphere () { radius = 0.0; center = Vec3f (0.0, 0.0, 0.0); color = Vec3f (0.0, 0.0, 0.0); is_real = false; }
-	Sphere (Vec3f cen, Vec3f col, float r, float s) : center (cen), color (col), radius (r), specular (s) { is_real = true; };
+	Sphere (Vec3f cen, Vec3f col, float r, float s, float ref) : center (cen), color (col), radius (r), specular (s), reflectance (ref) { is_real = true; };
 
 	float get_radius () {
 		return radius;
@@ -18,6 +18,10 @@ public:
 
 	float get_specular () {
 		return specular;
+	}
+
+	float get_reflectance () {
+		return reflectance;
 	}
 
 	// checking if sphere is real
