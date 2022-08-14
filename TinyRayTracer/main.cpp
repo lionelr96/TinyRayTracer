@@ -60,7 +60,7 @@ void render (std::vector<Sphere>& s) {
 	const int fov = M_PI / 2;
 	std::vector<Vec3f> framebuffer (width * height);
 	Vec3f origin (0.0, 0.0, 0.0);
-	float inf = std::numeric_limits<float>::infinity ();
+	float constexpr inf = std::numeric_limits<float>::infinity ();
 
 	for (size_t j = 0; j < height; j++) {
 		for (size_t i = 0; i < width; i++) {
@@ -88,7 +88,13 @@ void render (std::vector<Sphere>& s) {
 
 int main () {
 	std::vector<Sphere> spheres;
-	spheres.push_back (Sphere (Vec3f (-5, 0, -15), Vec3f (0.8, 0, 0), 1.5));
+	// spheres are rendered on the order of the center, color, and radius
+	spheres.push_back (Sphere (Vec3f (-5, 0, -15), Vec3f (0.8, 0, 0), 1.5)); // red
+	spheres.push_back (Sphere (Vec3f (3, 0, -17), Vec3f (0, 0, 0.8), 2)); // blue
+	spheres.push_back (Sphere (Vec3f (-1, 0, -14), Vec3f (0, 0.8, 0), 2)); // green
+	spheres.push_back (Sphere (Vec3f (-10, 0, -20), Vec3f (1, 0, 1), 1.5)); // purple
+	spheres.push_back (Sphere (Vec3f (7, 0, -20), Vec3f (1, 1, 0), 1.5)); // yellow
+	spheres.push_back (Sphere (Vec3f (0, -5001, 0), Vec3f (1, 1, 0), 5000));
 	render (spheres);
 	return 0;
 }
