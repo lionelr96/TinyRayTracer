@@ -90,7 +90,7 @@ void render (std::vector<Sphere>& spheres, std::vector<Light>& lights) {
 	const int height = 768;
 	const int fov = M_PI / 2;
 	std::vector<Vec3f> framebuffer (width * height);
-	Vec3f origin (0.0, 0.0, 0.0);
+	Vec3f origin (0.0, 3.0, 0.0);
 	float constexpr inf = std::numeric_limits<float>::infinity ();
 
 	// creating pixel colors and storing them

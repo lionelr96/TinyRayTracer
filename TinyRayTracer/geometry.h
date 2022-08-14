@@ -14,11 +14,7 @@ public:
 		magnitude = 0.0;
 	}
 	Vec3f (float a, float b, float c) : x (a), y (b), z (c) {
-		magnitude = std::sqrt (x * x + y * y + z * z);
-	}
-
-	int get_size () {
-		return size;
+		magnitude = std::sqrt ((x * x) + (y * y) + (z * z));
 	}
 
 	float get_magnitude () {
@@ -49,20 +45,14 @@ public:
 		return Vec3f (this->x - v.x, this->y - v.y, this->z - v.z);
 	}
 
-	// adding a number to a vector
-	Vec3f operator+(const float& v) {
-		this->x = this->x + v;
-		this->y = this->y + v;
-		this->z = this->z + z;
-		return *this;
+	// negating a vector
+	Vec3f operator-() {
+		return Vec3f (this->x * -1, this->y * -1, this->z * -1);
 	}
 
 	// multipling a number to a vector
 	Vec3f operator*(const float& v) {
-		this->x = this->x * v;
-		this->y = this->y * v;
-		this->z = this->z * z;
-		return *this;
+		return Vec3f (this->x * v, this->y * v, this->z * v);
 	}
 
 	// adding a vector to a vector
@@ -75,7 +65,12 @@ public:
 		return Vec3f (this->x / i, this->y / i, this->z / i);
 	}
 
-	// subtracing a vector by another vector
-
+	// cross product
+	Vec3f operator*(const Vec3f& v) {
+		int x_value = this->y * v.z - this->z * v.y;
+		int y_value = this->x * v.z - this->z * v.x;
+		int z_value = this->x * v.y - this->y * v.x;
+		return Vec3f (x_value, y_value, z_value);
+	}
 
 };
