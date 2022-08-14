@@ -7,3 +7,5 @@ Currently the renderer is capable of rendering shadows, reflectance, along with 
 ## Building
 Building is quite easy. Just run the main.cpp file and your compiler should do the rest. You can change the file name to output the specific file. You can add spheres or other light sources to create any effect you want.
 
+## Credit
+The code is my own implementation of the various algorithms provided by several sources, especially the book "Computer Graphics from Scratch: A Programmer's Introduction to 3D Rendering" by Gabriel Gambetta, which you can read here: https://gabrielgambetta.com/computer-graphics-from-scratch/
