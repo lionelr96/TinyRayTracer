@@ -50,7 +50,7 @@ public:
 		return Vec3f (this->x * -1, this->y * -1, this->z * -1);
 	}
 
-	// multipling a number to a vector
+	// multiplying a number to a vector
 	Vec3f operator*(const float& v) {
 		return Vec3f (this->x * v, this->y * v, this->z * v);
 	}
